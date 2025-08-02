@@ -63,27 +63,27 @@ async function sendPDF(to, filePath, templateNumber = null, originalMessage = ''
     console.log("✅ PDF sent to user:", to);
 
     // ✅ Notify admin of success
-  if (adminNumber && adminNumber !== to) {
-  await axios.post(
-    `https://graph.facebook.com/v19.0/${process.env.PHONE_NUMBER_ID}/messages`,
-    {
-      messaging_product: "whatsapp",
-      to: adminNumber,
-      type: "document",
-      document: {
-        id: mediaId,
-        caption: `📄 Rudransh Trading LR\nTemplate: ${templateNumber}\n Mobile: ${to}\nDate: ${new Date().toLocaleDateString()}\n\n📝 ${originalMessage}`,
-        filename: fileName,
-      },
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
+    if (adminNumber && adminNumber !== to) {
+      await axios.post(
+        `https://graph.facebook.com/v19.0/${process.env.PHONE_NUMBER_ID}/messages`,
+        {
+          messaging_product: "whatsapp",
+          to: adminNumber,
+          type: "document",
+          document: {
+            id: mediaId,
+            caption: `📄 Rudransh Trading LR\nTemplate: ${templateNumber}\nMobile: ${to}\nDate: ${new Date().toLocaleDateString()}\n\n📝 ${originalMessage}`,
+            filename: fileName,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
     }
-  );
-}
 
     // 🧹 Cleanup renamed file
     fs.unlinkSync(renamedPath);
